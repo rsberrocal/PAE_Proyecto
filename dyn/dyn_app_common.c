@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#include "dyn/dyn_instr.h"
+#include "dyn_instr.h"
 
 /**
  * Turn on or off the LED of a given dynamixel module
@@ -19,8 +19,7 @@
  * @param[in] val Boolean value for the LED objective state
  */
 int dyn_led_control(uint8_t id, bool val) {
-    return dyn_write_byte(id, DYN_REG__LED, (uint8_t) val);
-
+	return dyn_write_byte(id, DYN_REG__LED, (uint8_t) val);
 }
 
 /**
@@ -30,5 +29,9 @@ int dyn_led_control(uint8_t id, bool val) {
  * @param[out] val Current LED status
  */
 int dyn_led_read(uint8_t id, uint8_t *val) {
-    return dyn_read_byte(id, DYN_REG__LED, val);
+	return dyn_read_byte(id, DYN_REG__LED, val);
+}
+
+int checkRegister(uint8_t id, uint8_t regAdress, uint8_t *val){
+    return dyn_read_byte(id,regAdress,val);
 }

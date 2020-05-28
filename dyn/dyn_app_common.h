@@ -12,8 +12,7 @@
 #include <stdint.h>
 
 int dyn_led_control(uint8_t id, bool val);
-
-int dyn_led_read(uint8_t id, uint8_t *val);
-
+int dyn_led_read(uint8_t id,  uint8_t *val);
+int checkRegister(uint8_t id, uint8_t regAdress, uint8_t *val);
 
 #endif /* DYN_APP_COMMON_H_ */
