@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated />
+    <generated>
+      <config projectName="PAE_Proyecto" targetName="PAE_Proyecto" />
+    </generated>
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -9,7 +11,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="815ffa5c-07fd-49a1-86b5-18115134d42b" name="Default Changelist" comment="" />
+    <list default="true" id="b82f29b8-7bc2-41a5-855e-43dd8dd40ee7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/PAE_Proyecto.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PAE_Proyecto.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,32 +24,37 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1cYU4CetSp9CXOydDFCLd7zrFqo" />
+  <component name="ProjectId" id="1cYWaHVRXJV84A8NFr1I1Rv6r8C" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager">
+    <configuration name="PAE_Proyecto" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PAE_Proyecto" TARGET_NAME="PAE_Proyecto" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="PAE_Proyecto" RUN_TARGET_NAME="PAE_Proyecto">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="815ffa5c-07fd-49a1-86b5-18115134d42b" name="Default Changelist" comment="" />
-      <created>1590704826989</created>
+      <changelist id="b82f29b8-7bc2-41a5-855e-43dd8dd40ee7" name="Default Changelist" comment="" />
+      <created>1590706068514</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1590704826989</updated>
-      <workItem from="1590704830297" duration="23000" />
+      <updated>1590706068514</updated>
+      <workItem from="1590706070684" duration="68000" />
     </task>
     <servers />
   </component>
