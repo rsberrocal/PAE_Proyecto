@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 //Wheels
-#define RIGHT_WHEEL 2
-#define LEFT_WHEEL 3
+//#define RIGHT_WHEEL 2
+//#define LEFT_WHEEL 3
 
 //Instruccions
 #define WRITE_DATA 0x03

@@ -1,6 +1,7 @@
 #include "dyn_motors.h"
 #include "dyn_frames.h"
 #include "dyn_instr.h"
+#include "dyn_emu.h"
 
 void endlessTurn(byte idMotor) {
     //ID will not be broadcasting because the emulator, so setting the two motors manually
@@ -36,16 +37,16 @@ void moveWheel(byte ID, bool moveTo, unsigned int speed) {
 
 void stop(void) {
     //To stop set all wheels without rotation and no speed
-    moveWheel(RIGHT_WHEEL, false, 0);
-    moveWheel(LEFT_WHEEL, false, 0);
+    moveWheel(ID_MOTOR_R, false, 0);
+    moveWheel(ID_MOTOR_L, false, 0);
 }
 
 void turnLeft(unsigned int speed) {
     if (speed < MAX_SPEED) {
         //To go left right wheel to left and move it with speed
         //Left wheel is stopped
-        moveWheel(RIGHT_WHEEL, false, speed);
-        moveWheel(LEFT_WHEEL, false, 0);
+        moveWheel(ID_MOTOR_R, false, 0);
+        moveWheel(ID_MOTOR_L, false, speed);
     }
 }
 
@@ -53,8 +54,8 @@ void turnRight(unsigned int speed) {
     if (speed < MAX_SPEED) {
         //To go right left wheel to right and move it with speed
         //Right wheel is stopped
-        moveWheel(RIGHT_WHEEL, true, 0);
-        moveWheel(LEFT_WHEEL, true, speed);
+        moveWheel(ID_MOTOR_R, true, 0);
+        moveWheel(ID_MOTOR_L, true, speed);
     }
 }
 
@@ -62,8 +63,8 @@ void forward(unsigned int speed) {
     //To move forward set one wheels to right and the other to left
     // all have the same speed
     if (speed < MAX_SPEED) {
-        moveWheel(RIGHT_WHEEL, true, speed);
-        moveWheel(LEFT_WHEEL, false, speed);
+        moveWheel(ID_MOTOR_R, false, speed);
+        moveWheel(ID_MOTOR_L, false, speed);
     }
 }
 
@@ -71,7 +72,7 @@ void backward(unsigned int speed) {
     //To go backward set the wheels in reverse to forward
     // all have the same speed
     if (speed < MAX_SPEED) {
-        moveWheel(RIGHT_WHEEL, false, speed);
-        moveWheel(LEFT_WHEEL, true, speed);
+        moveWheel(ID_MOTOR_R, true, speed);
+        moveWheel(ID_MOTOR_L, true, speed);
     }
 }

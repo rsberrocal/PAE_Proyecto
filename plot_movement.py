@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pylab as plt
 import matplotlib.pyplot as pplt
 
-data = np.genfromtxt("movement.log", comments="#", delimiter=',')
+data = np.genfromtxt("cmake-build-debug\movement.log", comments="#", delimiter=',')
 x = data[:, 0]
 y = data[:, 1]
 w = data[:, 2]

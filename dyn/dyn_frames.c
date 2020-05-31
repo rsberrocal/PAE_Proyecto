@@ -6,25 +6,23 @@
  *
  * Dynamixel framing layer
  */
-
 #include "dyn_frames.h"
 
 #ifndef __MSP432P401R__
 
-#include "../hal_dyn_uart/hal_dyn_uart_emu.h"
-#include "../dyn_test/fake_msp.h"
+#include "hal_dyn_uart/hal_dyn_uart_emu.h"
+#include "fake_msp.h"
 
 #define f_TxUAC2 TxUAC2_emu
 #define f_Sentit_Dades_Tx Sentit_Dades_Tx_emu
 #define f_Sentit_Dades_Rx Sentit_Dades_Rx_emu
-#define f_Activa_Timer_TimeOut Activa_Timer_TimeOut_emu
 #define f_rx_uart_byte rx_uart_byte_emu
 
 #else
-#include "../hal_dyn_uart/hal_dyn_uart.h"
+#include "hal_dyn_uart/hal_dyn_uart.h"
 #include "msp.h"
 
-#define f_TxUAC2 TxUAC2u
+#define f_TxUAC2 TxUAC2
 #define f_Sentit_Dades_Tx Sentit_Dades_Tx
 #define f_Sentit_Dades_Rx Sentit_Dades_Rx
 #define f_Activa_Timer_TimeOut Activa_Timer_TimeOut
@@ -74,7 +72,7 @@ struct RxReturn RxPacket(void) {
     respuesta.time_out = false;
     respuesta.idx = 0;
     f_Sentit_Dades_Rx();   //Ponemos la linea half duplex en Rx
-    f_Activa_Timer_TimeOut();
+    //f_Activa_Timer_TimeOut();
     for (bCount = 0; bCount < 4; bCount++) {
         f_rx_uart_byte(&respuesta);
     } //fin del for

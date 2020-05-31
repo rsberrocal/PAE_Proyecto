@@ -1,7 +1,7 @@
 /*
  * movement_simulator.h
  *
- *  Created on: 16 d�abr. 2020
+ *  Created on: 16 dabr. 2020
  *      Author: droma
  */
 
@@ -12,7 +12,8 @@
 #include <stdint.h>
 #include <time.h>
 
-#define SIM_STEP_MS_TIME 10
+
+#define SIM_STEP_MS_TIME 500
 #define MAX_SIM_STEPS 1000
 
 #define INITIAL_POS_X 50

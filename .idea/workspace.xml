@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
       <config projectName="PAE_Proyecto" targetName="PAE_Proyecto" />
@@ -12,9 +21,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b82f29b8-7bc2-41a5-855e-43dd8dd40ee7" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/PAE_Proyecto.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PAE_Proyecto.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/PAE_Proyecto.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/PAE_Proyecto.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dyn/dyn_app_sensor.c" beforeDir="false" afterPath="$PROJECT_DIR$/dyn/dyn_app_sensor.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dyn/dyn_frames.c" beforeDir="false" afterPath="$PROJECT_DIR$/dyn/dyn_frames.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dyn/dyn_instr.h" beforeDir="false" afterPath="$PROJECT_DIR$/dyn/dyn_instr.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dyn/dyn_motors.c" beforeDir="false" afterPath="$PROJECT_DIR$/dyn/dyn_motors.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dyn/dyn_motors.h" beforeDir="false" afterPath="$PROJECT_DIR$/dyn/dyn_motors.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dyn_test/movement_simulator.h" beforeDir="false" afterPath="$PROJECT_DIR$/dyn_test/movement_simulator.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/movement.log" beforeDir="false" afterPath="$PROJECT_DIR$/movement.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plot_movement.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_movement.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +47,6 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -34,15 +56,67 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
+    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.plot_movement">
     <configuration name="PAE_Proyecto" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PAE_Proyecto" TARGET_NAME="PAE_Proyecto" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="PAE_Proyecto" RUN_TARGET_NAME="PAE_Proyecto">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="PAE_Proyecto" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="plot_movement" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PAE_Proyecto" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plot_movement.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.PAE_Proyecto" />
+      <item itemvalue="Python.plot_movement" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.plot_movement" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -55,10 +129,95 @@
       <option name="presentableId" value="Default" />
       <updated>1590706068514</updated>
       <workItem from="1590706070684" duration="68000" />
+      <workItem from="1590852113266" duration="260000" />
+      <workItem from="1590852382577" duration="198000" />
+      <workItem from="1590852619617" duration="578000" />
+      <workItem from="1590853299299" duration="539000" />
+      <workItem from="1590919352573" duration="5086000" />
+      <workItem from="1590933875637" duration="4431000" />
+      <workItem from="1590938613722" duration="65000" />
+      <workItem from="1590938752185" duration="103000" />
+      <workItem from="1590938858474" duration="1843000" />
+      <workItem from="1590940747211" duration="806000" />
+      <workItem from="1590942712846" duration="3441000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="506" y="162" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590938818553">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="506" y="162" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1590938818553" />
+    <state width="410" height="466" key="DebuggerActiveHint" timestamp="1590923192032">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="410" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1590923192032" />
+    <state width="1340" height="176" key="GridCell.Tab.0.bottom" timestamp="1590946157291">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="176" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1590946157291" />
+    <state width="1340" height="176" key="GridCell.Tab.0.center" timestamp="1590946157289">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="176" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1590946157289" />
+    <state width="1340" height="176" key="GridCell.Tab.0.left" timestamp="1590946157289">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="176" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1590946157289" />
+    <state width="1340" height="176" key="GridCell.Tab.0.right" timestamp="1590946157291">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="176" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1590946157291" />
+    <state width="1340" height="220" key="GridCell.Tab.1.bottom" timestamp="1590928679979">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="220" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1590928679979" />
+    <state width="1340" height="220" key="GridCell.Tab.1.center" timestamp="1590928679979">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="220" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1590928679979" />
+    <state width="1340" height="220" key="GridCell.Tab.1.left" timestamp="1590928679979">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="220" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1590928679979" />
+    <state width="1340" height="220" key="GridCell.Tab.1.right" timestamp="1590928679979">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1340" height="220" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1590928679979" />
+    <state x="409" y="214" key="SettingsEditor" timestamp="1590938643931">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="409" y="214" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1590938643931" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/dyn_test/movement_simulator.c</url>
+          <line>163</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/dyn_test/movement_simulator.c</url>
+          <line>161</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

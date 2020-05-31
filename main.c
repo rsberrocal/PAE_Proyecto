@@ -4,10 +4,22 @@
 #include <posicion.h>
 #include <stdio.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+#else
+
+#include <unistd.h>
+
+#endif
+
 #include "main.h"
 #include "dyn/dyn_app_common.h"
 #include "dyn_test/dyn_emu.h"
 #include "dyn_test/b_queue.h"
+#include "dyn_motors.h"
+#include "dyn_instr.h"
+#include "dyn_app_sensor.h"
+#include "movement_simulator.h"
 #include "joystick_emu/joystick.h"
 #include "habitacion_001.h"
 
@@ -20,6 +32,7 @@ uint32_t indice;
 int main(void) {
     pthread_t tid, jid;
     uint8_t tmp;
+    int main_speed = 120;
 
     //Init queue for TX/RX data
     init_queue(&q_tx);
@@ -45,13 +58,141 @@ int main(void) {
     printf("\n************************\n");
     printf("Test passed successfully\n");
 
+    //Setting motors
+    endlessTurn(ID_MOTOR_R);
+    endlessTurn(ID_MOTOR_L);
+    distanceToGetObstacle(ID_SENSOR, 0x34);
+    //distanceToGetObstacle(ID_SENSOR, 0x14);
+
     printf("\nDimensiones habitacion %d ancho x %d largo mm2\n", ANCHO, LARGO);
     printf("En memoria: %I64u B = %I64u MiB\n", sizeof(datos_habitacion), sizeof(datos_habitacion) >> 20);
 
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
     fflush(stdout);//	return 0;
+    //goForward
+    forward(main_speed);
+    sleep(10);
+    stop();
 
-    while (estado != Quit) {
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+    turnLeft(main_speed);
+    sleep(2);
+    stop();
+
+    forward(main_speed);
+    sleep(10);
+    stop();
+
+
+
+    /*while (estado != Quit) {
         if (simulator_finished) {
             break;
         }
@@ -62,12 +203,12 @@ int main(void) {
             switch (estado) {
                 case Sw1:
                     printf("Boton Sw1 ('a') apretado\n");
-                    dyn_led_control(1, 1); //Probaremos de encender el led del motor 2
+                    //dyn_led_control(1, 1); //Probaremos de encender el led del motor 2
                     printf("\n");
                     break;
                 case Sw2:
                     printf("Boton Sw2 ('s') apretado\n");
-                    dyn_led_control(1, 0); //Probaremos de apagar el led del motor 2
+                    //dyn_led_control(1, 0); //Probaremos de apagar el led del motor 2
                     printf("\n");
                     break;
                 case Up:
@@ -88,6 +229,8 @@ int main(void) {
                     printf("(0, 4094): %d (pared izq.)\n", obstaculo(0, 4094, datos_habitacion));
                     printf("(1, 4095): %d (pared fondo.)\n", obstaculo(1, 4095, datos_habitacion));
                     printf("(0, 4095): %d (esquina)\n", obstaculo(0, 4095, datos_habitacion));
+                    forward(900);
+                    //stop();
                     break;
                 case Right:
                     //Comprobaremos si detectamos las esquinas de la pared derecha:
@@ -112,7 +255,7 @@ int main(void) {
             }
             fflush(stdout);
         }
-    }
+    }*/
     //Signal the emulation thread to stop
     pthread_kill(tid, SIGTERM);
     pthread_kill(jid, SIGTERM);
