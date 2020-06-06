@@ -7,17 +7,19 @@
 
 #ifndef DYN_SENSOR_H_
 #define DYN_SENSOR_H_
-#define OBSTACLE_DETECTED 0X20
+#define OBSTACLE_DETECTED 0x20
 
 #include <stdint.h>
 
 typedef uint8_t byte;
 
-int distanceToGetObstacle(byte ID, byte position);
+void setDistanceToObject(byte ID, byte position, int dist);
 
-int sensorRead(byte ID, byte sensor);
+uint8_t distanceToGetObstacle(byte ID, byte position);
 
-int getObstacleFlag(byte ID);
+uint8_t sensorRead(byte ID, byte sensor);
+
+uint8_t getObstacleFlag(byte ID);
 
 
 #endif /* DYN_SENSOR_H_ */

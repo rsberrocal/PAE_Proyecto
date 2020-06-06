@@ -139,9 +139,9 @@ void calculate_new_position() {
  *
  */
 void update_sensor_data() {
-    distance(&robot_pos_str, &dyn_mem[SENSOR_MEM_ROW][DYN_REG__IR_LEFT],
-             &dyn_mem[SENSOR_MEM_ROW][DYN_REG__IR_CENTER],
-             &dyn_mem[SENSOR_MEM_ROW][DYN_REG__IR_RIGHT]);
+    distance(&robot_pos_str, &dyn_mem[ID_SENSOR-1][DYN_REG__IR_LEFT],
+             &dyn_mem[ID_SENSOR-1][DYN_REG__IR_CENTER],
+             &dyn_mem[ID_SENSOR-1][DYN_REG__IR_RIGHT]);
 }
 
 
@@ -177,11 +177,10 @@ void update_movement_simulator_values() {
     if (elapsed_time(t_last_upd, objective_delay, &true_elapsed_time)) {
         objective_delay -= (true_elapsed_time - SIM_STEP_MS_TIME);
         t_last_upd = clock();
+        update_sensor_data();
         robot_pos_str.sim_step++;
-
         calculate_new_position();
         check_out_of_bounds();
-        update_sensor_data();
         check_colision();
 #if DEBUG_LEVEL > 2
         check_simulation_end();

@@ -11,36 +11,39 @@
 #include "dyn_instr.h"
 
 
-int distanceToGetObstacle(byte ID, byte postion) {
-    byte param[1];
-    param[0] = 1;
+void setDistanceToObject(byte ID, byte position, int dist) {
+    //Ponemos en el obstacle detected compare value
+    byte params[1] = {dist};
     //position will be 0x34(RAM) or 0x14(ROM)
-    dyn_read_byte(ID, postion, param);
-
-    return param[0];
+    dyn_write(ID, position, params, 1);
 }
 
+uint8_t distanceToGetObstacle(byte ID, byte postion) {
+    uint8_t dist = 0;
+    //position will be 0x34(RAM) or 0x14(ROM)
+    dyn_read_byte(ID, postion, &dist);
 
-int sensorRead(byte ID, byte sensor) {
+    return dist;
+}
+
+uint8_t sensorRead(byte ID, byte sensor) {
     //sensor can be 1A Sensor Left; 1B Sensor Center; 1C Sensor Right
-    byte param[1];
-    param[0] = 1; //length of the read
+    uint8_t dist = 0;
 
-    dyn_read_byte(ID, sensor, param); //get distance
+    dyn_read_byte(ID, sensor, &dist); //get distance
 
-    return param[0];
+    return dist;
 }
 
 
-int getObstacleFlag(byte ID) {
+uint8_t getObstacleFlag(byte ID) {
     //flags
     // 2 detected in sensor right
     // 1 detected in sensor center
     // 0 detected in sensor left
-    byte param[1];
-    param[0] = 1;
+    uint8_t flag = 0;
 
-    dyn_read_byte(ID, OBSTACLE_DETECTED, param);
+    dyn_read_byte(ID, OBSTACLE_DETECTED, &flag);
 
-    return param[0];
+    return flag;
 }

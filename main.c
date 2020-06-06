@@ -26,6 +26,36 @@
 uint8_t estado = Ninguno, estado_anterior = Ninguno, finalizar = 0;
 uint32_t indice;
 
+//return to
+int getNearWall(uint8_t *minDist) {
+    uint8_t distLeft = sensorRead(ID_SENSOR, DYN_REG__IR_LEFT);
+    printf("Distance left %d\n", distLeft);
+    uint8_t distCenter = sensorRead(ID_SENSOR, DYN_REG__IR_CENTER);
+    printf("Distance center %d\n", distCenter);
+    uint8_t distRight = sensorRead(ID_SENSOR, DYN_REG__IR_RIGHT);
+    printf("Distance right %d\n", distRight);
+    if (distLeft <= distCenter && distLeft < distRight) {
+        *minDist = distLeft;
+        return 0;
+    }
+    if (distCenter <= distLeft && distCenter < distRight) {
+        *minDist = distCenter;
+        return 1;
+    }
+    if (distRight <= distCenter && distRight < distLeft) {
+        *minDist = distRight;
+        return 2;
+    }
+}
+
+int isCorrectPosition(){
+    uint8_t aux;
+    if(getNearWall(&aux) == 0){
+        return 1;
+    }
+    return 0;
+}
+
 /**
  * main.c
  */
@@ -33,6 +63,14 @@ int main(void) {
     pthread_t tid, jid;
     uint8_t tmp;
     int main_speed = 120;
+    uint8_t MIN_DIST_WALL = 2;
+    uint8_t MAX_DIST_WALL = 10;
+    uint8_t distCenter = 0;
+    uint8_t distRight = 0;
+    uint8_t distLeft = 0;
+    int flagRotation = -1;
+    int searchingWall = 1;
+    uint8_t minDistance = 11;
 
     //Init queue for TX/RX data
     init_queue(&q_tx);
@@ -48,12 +86,12 @@ int main(void) {
     dyn_led_control(1, 0);
     printf("\nGetting LED value \n");
     dyn_led_read(1, &tmp);
-    assert(tmp == 0);
+    //assert(tmp == 0);
     printf("\nSetting LED to 1 \n");
     dyn_led_control(1, 1);
     printf("\nGetting LED value \n");
     dyn_led_read(1, &tmp);
-    assert(tmp == 1);
+    //assert(tmp == 1);
 
     printf("\n************************\n");
     printf("Test passed successfully\n");
@@ -61,142 +99,102 @@ int main(void) {
     //Setting motors
     endlessTurn(ID_MOTOR_R);
     endlessTurn(ID_MOTOR_L);
-    distanceToGetObstacle(ID_SENSOR, 0x34);
-    //distanceToGetObstacle(ID_SENSOR, 0x14);
 
     printf("\nDimensiones habitacion %d ancho x %d largo mm2\n", ANCHO, LARGO);
     printf("En memoria: %I64u B = %I64u MiB\n", sizeof(datos_habitacion), sizeof(datos_habitacion) >> 20);
 
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
     fflush(stdout);//	return 0;
-    //goForward
-    forward(main_speed);
-    sleep(10);
-    stop();
 
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-    turnLeft(main_speed);
-    sleep(2);
-    stop();
-
-    forward(main_speed);
-    sleep(10);
-    stop();
-
-
-
-    /*while (estado != Quit) {
+    while (estado != Quit) {
         if (simulator_finished) {
             break;
         }
         Get_estado(&estado, &estado_anterior);
+
+        //set distances
+        if (!(minDistance >= MIN_DIST_WALL && minDistance < MAX_DIST_WALL) &&
+            searchingWall == 1) {//Si no hemos llegado al la distancia minima para no buscar la pared
+            int wall = getNearWall(&minDistance);
+            if (flagRotation != wall) {
+                stop();
+                switch (wall) {
+                    case 0:
+                        printf("Es la izquierda\n");
+                        turnLeft(main_speed);
+                        break;
+                    case 1:
+                        printf("Es el centro \n");
+                        forward(main_speed);
+                        break;
+                    case 2:
+                        printf("Es la derecha \n");
+                        turnRight(main_speed);
+                        break;
+                }
+                flagRotation = wall;
+            }
+            printf("min distance %d \n", minDistance);
+            searchingWall = 1;
+        } else {
+            //Follow the wall
+            if(searchingWall == 1){
+                printf("Stop searching");
+                searchingWall = 0; //we are not searching for a wall anymore
+                flagRotation = 0;
+                stop();
+            }
+            if (isCorrectPosition() == 1){
+                printf("Correct position");
+                forward(main_speed);
+                flagRotation = 0;
+            }else{
+                printf("Correcting position to right");
+                if(flagRotation == 0){
+                    turnRight(1);
+                    flagRotation = 1;
+                }
+            }
+            printf("we are on the wall\n");
+            //Rotate to the left to follow the wall
+            /*turnRight(main_speed);
+            stop();*/
+
+            //Signal the emulation thread to stop
+        }
+
+
+
+        //1er caso, no hay ningun obstaculo, go forward
+        /*if (distLeft > MAX_DISTANCE_OBSTACLE && distCenter > MAX_DISTANCE_OBSTACLE &&
+            distRight > MAX_DISTANCE_OBSTACLE) {
+            printf("No hay obstaculos \n");
+            forward(main_speed);
+        } else {
+            if (distLeft >= distCenter && distLeft >= distRight) {//2do caso, en la izquierda esta mas properoç
+                printf("La izq es mayor \n");
+                stop();
+                turnLeft(10);
+                stop();
+                forward(10);
+                stop();
+            } else if (distCenter >= distLeft && distCenter >= distRight) {//3er caso, el centro esta mas propero
+                printf("center es mayor \n");
+                stop();
+                turnLeft(10);
+                stop();
+                forward(10);
+                stop();
+            } else if (distRight >= distCenter && distRight >= distLeft) {//4to caso, en la derecha esta mas propero
+                printf("La der es mayor \n");
+                stop();
+                turnRight(10);
+                stop();
+                forward(10);
+                stop();
+            }
+        }*/
+        /*** Teclado ***/
         if (estado != estado_anterior) {
             Set_estado_anterior(estado);
             printf("estado = %d\n", estado);
@@ -229,7 +227,6 @@ int main(void) {
                     printf("(0, 4094): %d (pared izq.)\n", obstaculo(0, 4094, datos_habitacion));
                     printf("(1, 4095): %d (pared fondo.)\n", obstaculo(1, 4095, datos_habitacion));
                     printf("(0, 4095): %d (esquina)\n", obstaculo(0, 4095, datos_habitacion));
-                    forward(900);
                     //stop();
                     break;
                 case Right:
@@ -252,13 +249,18 @@ int main(void) {
                     printf("Adios!\n");
                     break;
                     //etc, etc...
+                    pthread_kill(tid, SIGTERM);
+                    pthread_kill(jid, SIGTERM);
+                    printf("Programa terminado\n");
+                    fflush(stdout);
             }
             fflush(stdout);
         }
-    }*/
-    //Signal the emulation thread to stop
+
+    }
     pthread_kill(tid, SIGTERM);
     pthread_kill(jid, SIGTERM);
     printf("Programa terminado\n");
     fflush(stdout);
+
 }

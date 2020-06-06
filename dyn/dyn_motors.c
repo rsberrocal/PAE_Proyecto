@@ -45,8 +45,8 @@ void turnLeft(unsigned int speed) {
     if (speed < MAX_SPEED) {
         //To go left right wheel to left and move it with speed
         //Left wheel is stopped
-        moveWheel(ID_MOTOR_R, false, 0);
-        moveWheel(ID_MOTOR_L, false, speed);
+        moveWheel(ID_MOTOR_R, false, speed);
+        moveWheel(ID_MOTOR_L, false, 0);
     }
 }
 
