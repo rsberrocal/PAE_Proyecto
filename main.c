@@ -26,7 +26,7 @@
 uint8_t estado = Ninguno, estado_anterior = Ninguno, finalizar = 0;
 uint32_t indice;
 
-//return to
+//return to 0 if min dist is on left, 1 on center, 2 on right
 int getNearWall(uint8_t *minDist) {
     uint8_t distLeft = sensorRead(ID_SENSOR, DYN_REG__IR_LEFT);
     printf("Distance left %d\n", distLeft);
@@ -48,9 +48,15 @@ int getNearWall(uint8_t *minDist) {
     }
 }
 
-int isCorrectPosition(){
-    uint8_t aux;
-    if(getNearWall(&aux) == 0){
+int isOnWall(const uint8_t *minDist){
+    if (*minDist >= 30 && *minDist < 70){
+        return 1;
+    }
+    return 0;
+}
+
+int isCorrectPosition(uint8_t *minDist){
+    if(getNearWall(minDist) == 0){
         return 1;
     }
     return 0;
@@ -63,14 +69,12 @@ int main(void) {
     pthread_t tid, jid;
     uint8_t tmp;
     int main_speed = 120;
-    uint8_t MIN_DIST_WALL = 2;
-    uint8_t MAX_DIST_WALL = 10;
     uint8_t distCenter = 0;
     uint8_t distRight = 0;
     uint8_t distLeft = 0;
     int flagRotation = -1;
     int searchingWall = 1;
-    uint8_t minDistance = 11;
+    uint8_t minDistance = 255;
 
     //Init queue for TX/RX data
     init_queue(&q_tx);
@@ -113,15 +117,18 @@ int main(void) {
         Get_estado(&estado, &estado_anterior);
 
         //set distances
-        if (!(minDistance >= MIN_DIST_WALL && minDistance < MAX_DIST_WALL) &&
-            searchingWall == 1) {//Si no hemos llegado al la distancia minima para no buscar la pared
+        if (!isOnWall(&minDistance)) {//Si no hemos llegado al la distancia minima para no buscar la pared
             int wall = getNearWall(&minDistance);
             if (flagRotation != wall) {
                 stop();
                 switch (wall) {
                     case 0:
                         printf("Es la izquierda\n");
-                        turnLeft(main_speed);
+                        if(minDistance < 15){
+                            turnRight(main_speed);
+                        }else{
+                            turnLeft(main_speed);
+                        }
                         break;
                     case 1:
                         printf("Es el centro \n");
@@ -129,7 +136,11 @@ int main(void) {
                         break;
                     case 2:
                         printf("Es la derecha \n");
-                        turnRight(main_speed);
+                        if(minDistance < 10){
+                            turnLeft(main_speed);
+                        }else{
+                            turnRight(main_speed);
+                        }
                         break;
                 }
                 flagRotation = wall;
@@ -138,24 +149,25 @@ int main(void) {
             searchingWall = 1;
         } else {
             //Follow the wall
-            if(searchingWall == 1){
-                printf("Stop searching");
-                searchingWall = 0; //we are not searching for a wall anymore
-                flagRotation = 0;
-                stop();
-            }
-            if (isCorrectPosition() == 1){
-                printf("Correct position");
-                forward(main_speed);
-                flagRotation = 0;
+            printf("Stop searching\n");
+            stop();
+            searchingWall==0;
+            flagRotation = -1;
+            if (isCorrectPosition(&minDistance) == 1){
+                printf("Correct position\n");
+                if (flagRotation != 0){
+                    stop();
+                    forward(main_speed);
+                    flagRotation = 0;
+                }
             }else{
-                printf("Correcting position to right");
-                if(flagRotation == 0){
-                    turnRight(1);
+                printf("Correcting position to right \n");
+                if(flagRotation != 1){
+                    stop();
+                    turnRight(80);
                     flagRotation = 1;
                 }
             }
-            printf("we are on the wall\n");
             //Rotate to the left to follow the wall
             /*turnRight(main_speed);
             stop();*/

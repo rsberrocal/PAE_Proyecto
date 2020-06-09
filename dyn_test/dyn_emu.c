@@ -55,6 +55,8 @@ typedef enum _err_bits {
 //Start of frame of the dynamixel modules
 static const uint8_t dyn_header[] = {0xFF, 0xFF};
 
+//volatile bool simulator_finished;
+
 // Structure of the header from the dynamixel instruction packets
 typedef struct __attribute__((__packed__)) _instr_packet_header {
     uint8_t header[sizeof(dyn_header)];
@@ -209,7 +211,7 @@ void *dyn_emu(void *vargp) {
 
     init_movement_simulator(world); //World must have been initialized previously from main() by calling init_world()
 
-    while (true) {
+    while (!simulator_finished) {
 
         update_movement_simulator_values();
 

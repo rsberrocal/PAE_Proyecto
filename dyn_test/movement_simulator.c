@@ -226,6 +226,6 @@ void check_simulation_end() {
 void end_simulator() {
     simulator_finished = true;
     fclose(fichero);
-    pthread_exit(NULL);
+    //pthread_exit(NULL);
 }
 

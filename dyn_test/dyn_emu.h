@@ -20,7 +20,7 @@
 typedef uint8_t dyn_matrix_t[N_DEVICES][DYN_MAX_POS];
 dyn_matrix_t dyn_mem;
 
-bool simulator_finished;
+bool volatile  simulator_finished;
 
 #define ID_MOTOR_L 1
 #define MOTOR_L_MEM_ROW (ID_MOTOR_L-1)
