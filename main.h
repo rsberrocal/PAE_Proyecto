@@ -15,5 +15,6 @@
  *   4.
  */
 #define DEBUG_LEVEL 3
+#define MAIN_SPEED 145
 
 #endif /* MAIN_H_ */

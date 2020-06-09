@@ -26,6 +26,8 @@
 uint8_t estado = Ninguno, estado_anterior = Ninguno, finalizar = 0;
 uint32_t indice;
 
+int isOnWall(const uint8_t *dist, int min, int max);
+
 //return to 0 if min dist is on left, 1 on center, 2 on right
 int getNearWall(uint8_t *minDist) {
     uint8_t distLeft = sensorRead(ID_SENSOR, DYN_REG__IR_LEFT);
@@ -48,18 +50,140 @@ int getNearWall(uint8_t *minDist) {
     }
 }
 
-int isOnWall(const uint8_t *minDist){
-    if (*minDist >= 30 && *minDist < 70){
+int isOnWall(const uint8_t *minDist, int min, int max) {
+    if (*minDist > min && *minDist < max) {
         return 1;
     }
     return 0;
 }
 
-int isCorrectPosition(uint8_t *minDist){
-    if(getNearWall(minDist) == 0){
-        return 1;
+void searchingWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
+    if (isOnWall(minDist, 30 , 70) == 0) {//Si no esta en la pared
+        printf("Buscamos pared\n");
+        int wall = getNearWall(minDist);//Miramos en que pared esta, tambien pillamos la distancia minima
+        if (*lastWall != wall) {//Si la pared ha cambiado es que necesitamos hacer un giro
+            switch (wall) {
+                case 0://Cambiamos a la izquierda
+                    //Hacemos un stop y en la siguiente iteracion giramos
+                    if (*isStopped == 0) {//No esta parado
+                        stop();
+                        *isStopped = 1;
+                    } else {//Esta parado
+                        turnLeft(MAIN_SPEED);//giramos
+                        *lastWall = wall;
+                        *isStopped = 0;// ya no esta quieto
+                    }
+                    break;
+                case 1://Cambiamos hacia adelante
+                    //Hacemos un stop y en la siguiente iteracion giramos
+                    if (*isStopped == 0) {//No esta parado
+                        stop();
+                        *isStopped = 1;
+                    } else {//Esta parado
+                        forward(MAIN_SPEED);//giramos
+                        *lastWall = wall;
+                        *isStopped = 0;// ya no esta quieto
+                    }
+                    break;
+                case 2://Cambiamos a la izquierda
+                    //Hacemos un stop y en la siguiente iteracion giramos
+                    if (*isStopped == 0) {//No esta parado
+                        stop();
+                        *isStopped = 1;
+                    } else {//Esta parado
+                        turnRight(MAIN_SPEED);//giramos
+                        *lastWall = wall;
+                        *isStopped = 0;// ya no esta quieto
+                    }
+                    break;
+            }
+        }
+    } else {//de estarlo pasamos al siguiente stage
+        if (*isStopped == 0) { //Si no esta parado, lo paramos
+            stop();
+            *isStopped = 1;
+        }
+        *lastWall = -1;//Reset de wall
+        *stage = 1;
     }
-    return 0;
+}
+
+void followWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
+    int wall = getNearWall(minDist);//Miramos en que pared esta, tambien pillamos la distancia minima
+    if (isOnWall(minDist, 40, 70) == 1) {//Si esta en la pared
+        //Corregimos posicion
+        if (wall != 0) {//La pared mas cercana no es la de la izquierda, corregimos
+            //Hacemos un stop y en la siguiente iteracion giramos
+            if (*lastWall != 2) {
+                if (*isStopped == 0) {//No esta parado
+                    stop();
+                    *isStopped = 1;
+                } else {//Esta parado
+                    turnRight(80);//giramos
+                    *lastWall = 2;
+                    *isStopped = 0;// ya no esta quieto
+                }
+            }
+        } else {// estamos alineados con la pared nos movemos adelante
+            //Hacemos un stop y en la siguiente iteracion giramos
+            printf("Adelante\n\n");
+            if (*lastWall != 0) {
+                if (*isStopped == 0) {//No esta parado
+                    stop();
+                    *isStopped = 1;
+                } else {//Esta parado
+                    forward(MAIN_SPEED);//giramos
+                    *lastWall = 0;
+                    *isStopped = 0;// ya no esta quieto
+                }
+            }
+        }
+    } else {//Si no esta en la pared
+        printf("No esta en pared %d \n", *minDist);
+        if (*isStopped == 0) { //Si no esta parado, lo paramos
+            stop();
+            *isStopped = 1;
+        }
+        *lastWall = -1;//Reset de wall
+        *stage = 2;
+    }
+}
+
+void correctPosition(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
+    int wall = getNearWall(minDist);//Miramos en que pared esta, tambien pillamos la distancia minima
+    if (isOnWall(minDist,40 , 70) == 0) {
+        if(*minDist >=70){//Si se ha desviado para la derecha, giramos en lado contrario
+            if (*lastWall != 2) {
+                if (*isStopped == 0) {//No esta parado
+                    stop();
+                    *isStopped = 1;
+                } else {//Esta parado
+                    turnLeft(80);//giramos
+                    *lastWall = 2;
+                    *isStopped = 0;// ya no esta quieto
+                }
+            }
+        }else{//se ha desviado para la izquierda, giramos a la derecha
+            if (*lastWall != 0) {
+                if (*isStopped == 0) {//No esta parado
+                    stop();
+                    *isStopped = 1;
+                } else {//Esta parado
+                    turnRight(MAIN_SPEED);//giramos
+                    *lastWall = 0;
+                    *isStopped = 0;// ya no esta quieto
+                }
+            }
+        }
+    }else {//esta corregido la posicion
+        printf("esta en pared %d \n", *minDist);
+        if (*isStopped == 0) { //Si no esta parado, lo paramos
+            stop();
+            *isStopped = 1;
+        }
+        *lastWall = -1;//Reset de wall
+        *stage = 1;
+    }
 }
 
 /**
@@ -68,12 +192,16 @@ int isCorrectPosition(uint8_t *minDist){
 int main(void) {
     pthread_t tid, jid;
     uint8_t tmp;
-    int main_speed = 120;
+    int main_speed = 190;
     uint8_t distCenter = 0;
     uint8_t distRight = 0;
     uint8_t distLeft = 0;
     int flagRotation = -1;
-    int searchingWall = 1;
+    int lastWall = -1;
+    int isStopped = 1;
+    //int searchingWall = 1;
+    int hasStop = -1;
+    int stage = 0; //Estado, 0 -> Buscando pared.
     uint8_t minDistance = 255;
 
     //Init queue for TX/RX data
@@ -109,71 +237,89 @@ int main(void) {
 
     printf("Pulsar 'q' para terminar, qualquier tecla para seguir\n");
     fflush(stdout);//	return 0;
-
+    int test = 0;
     while (estado != Quit) {
         if (simulator_finished) {
             break;
         }
         Get_estado(&estado, &estado_anterior);
+        switch (stage) {
+            case 0:// buscamos la pared mas cercana
+                searchingWall(&minDistance, &stage, &lastWall, &isStopped);
+                break;
+            case 1://Estamos en la pared, solo tenemos que seguirla
+                printf("Estamos en pared\n");
+                followWall(&minDistance, &stage, &lastWall, &isStopped);
+                break;
+            case 2:
+                printf("Hay que corregir posicion\n");
+                correctPosition(&minDistance, &stage, &lastWall, &isStopped);
+                break;
+        }
+
 
         //set distances
-        if (!isOnWall(&minDistance)) {//Si no hemos llegado al la distancia minima para no buscar la pared
-            int wall = getNearWall(&minDistance);
-            if (flagRotation != wall) {
-                stop();
-                switch (wall) {
-                    case 0:
-                        printf("Es la izquierda\n");
-                        if(minDistance < 15){
-                            turnRight(main_speed);
-                        }else{
-                            turnLeft(main_speed);
-                        }
-                        break;
-                    case 1:
-                        printf("Es el centro \n");
-                        forward(main_speed);
-                        break;
-                    case 2:
-                        printf("Es la derecha \n");
-                        if(minDistance < 10){
-                            turnLeft(main_speed);
-                        }else{
-                            turnRight(main_speed);
-                        }
-                        break;
-                }
-                flagRotation = wall;
-            }
-            printf("min distance %d \n", minDistance);
-            searchingWall = 1;
-        } else {
-            //Follow the wall
-            printf("Stop searching\n");
-            stop();
-            searchingWall==0;
-            flagRotation = -1;
-            if (isCorrectPosition(&minDistance) == 1){
-                printf("Correct position\n");
-                if (flagRotation != 0){
-                    stop();
-                    forward(main_speed);
-                    flagRotation = 0;
-                }
-            }else{
-                printf("Correcting position to right \n");
-                if(flagRotation != 1){
-                    stop();
-                    turnRight(80);
-                    flagRotation = 1;
-                }
-            }
-            //Rotate to the left to follow the wall
-            /*turnRight(main_speed);
-            stop();*/
+        /* if (!isOnWall(&minDistance)) {//Si no hemos llegado al la distancia minima para no buscar la pared
+             int wall = getNearWall(&minDistance);//Miramos en que pared esta, tambien pillamos la distancia minima
+             if (flagRotation != wall) {//Si la pared esta en una dirección a la que no estamos, cambiamos direccion
+                 hasStop = 0;// need stop
+                 switch (wall) {
+                     case 0://Si esta a la izquierda
+                         printf("Es la izquierda\n");
+                         checkStop(&hasStop);
+                         if (minDistance <= 30) {//Si la distancia minima es 15 volvemos a la derecha para no salirnos
+                             printf("Corregimos posicion a la derecha\n\n\n\n\n\n\n\n");
+                             turnRight(main_speed);//Giramos el robot
+                         } else {
+                             turnLeft(main_speed);//Si estamos fuera del limite menor vamos a la izquierda
+                         }
+                         break;
+                     case 1://Si es el centro miramos adelante
+                         printf("Es el centro \n");
+                         checkStop(&hasStop);
+                         forward(main_speed);
+                         break;
+                     case 2:
+                         printf("Es la derecha \n");
+                         checkStop(&hasStop);
+                         if (minDistance <= 30) {
+                             turnLeft(main_speed);
+                         } else {
+                             turnRight(main_speed);
+                         }
+                         break;
+                 }
+                 flagRotation = wall;
+             }
+             printf("min distance %d \n", minDistance);
+         } else {
+             //Follow the wall
+             if (searchingWall == 1) {
+                 printf("Stop searching\n");//Paramos de i
+                 hasStop = 0;//need stop
+                 flagRotation = -1;
+             }
+             if (isCorrectPosition(&minDistance) == 1) {
+                 printf("Correct position\n");
+                 if (flagRotation != 5){
+                     checkStop(&hasStop);
+                     forward(main_speed);
+                     flagRotation = 5;
+                 }
+             } else {
+                 printf("Correcting position to right \n");
+                 if (flagRotation != 6){
+                     checkStop(&hasStop);
+                     turnRight(main_speed-20);
+                     flagRotation = 6;
+                 }
+             }
+             //Rotate to the left to follow the wall
+             /*turnRight(main_speed);
+             stop();*/
 
-            //Signal the emulation thread to stop
-        }
+        //Signal the emulation thread to stop
+        /*}*/
 
 
 

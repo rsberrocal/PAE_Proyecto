@@ -2,6 +2,7 @@
 #include "dyn_frames.h"
 #include "dyn_instr.h"
 #include "dyn_emu.h"
+#include <stdio.h>
 
 void endlessTurn(byte idMotor) {
     //ID will not be broadcasting because the emulator, so setting the two motors manually
@@ -37,6 +38,7 @@ void moveWheel(byte ID, bool moveTo, unsigned int speed) {
 
 void stop(void) {
     //To stop set all wheels without rotation and no speed
+    printf("stoppping\n");
     moveWheel(ID_MOTOR_R, false, 0);
     moveWheel(ID_MOTOR_L, false, 0);
 }
@@ -45,6 +47,7 @@ void turnLeft(unsigned int speed) {
     if (speed < MAX_SPEED) {
         //To go left right wheel to left and move it with speed
         //Left wheel is stopped
+        printf("going to left\n");
         moveWheel(ID_MOTOR_R, false, speed);
         moveWheel(ID_MOTOR_L, false, 0);
     }
@@ -54,8 +57,9 @@ void turnRight(unsigned int speed) {
     if (speed < MAX_SPEED) {
         //To go right left wheel to right and move it with speed
         //Right wheel is stopped
+        printf("going to right\n");
         moveWheel(ID_MOTOR_R, true, 0);
-        moveWheel(ID_MOTOR_L, true, speed);
+        moveWheel(ID_MOTOR_L, false, speed);
     }
 }
 
@@ -63,6 +67,7 @@ void forward(unsigned int speed) {
     //To move forward set one wheels to right and the other to left
     // all have the same speed
     if (speed < MAX_SPEED) {
+        printf("going to forward\n");
         moveWheel(ID_MOTOR_R, false, speed);
         moveWheel(ID_MOTOR_L, false, speed);
     }
