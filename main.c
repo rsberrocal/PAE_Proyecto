@@ -31,11 +31,11 @@ int isOnWall(const uint8_t *dist, int min, int max);
 //return to 0 if min dist is on left, 1 on center, 2 on right
 int getNearWall(uint8_t *minDist) {
     uint8_t distLeft = sensorRead(ID_SENSOR, DYN_REG__IR_LEFT);
-    printf("Distance left %d\n", distLeft);
+    //printf("LEFT: %hu \n", distLeft);
     uint8_t distCenter = sensorRead(ID_SENSOR, DYN_REG__IR_CENTER);
-    printf("Distance center %d\n", distCenter);
+    //printf("CENTER: %hu \n", distCenter);
     uint8_t distRight = sensorRead(ID_SENSOR, DYN_REG__IR_RIGHT);
-    printf("Distance right %d\n", distRight);
+    //printf("RIGHT: %hu \n", distRight);
     if (distLeft <= distCenter && distLeft < distRight) {
         *minDist = distLeft;
         return 0;
@@ -58,7 +58,7 @@ int isOnWall(const uint8_t *minDist, int min, int max) {
 }
 
 void searchingWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
-    if (isOnWall(minDist, 30 , 70) == 0) {//Si no esta en la pared
+    if (isOnWall(minDist, 30 , 45) == 0) {//Si no esta en la pared
         printf("Buscamos pared\n");
         int wall = getNearWall(minDist);//Miramos en que pared esta, tambien pillamos la distancia minima
         if (*lastWall != wall) {//Si la pared ha cambiado es que necesitamos hacer un giro
@@ -109,8 +109,9 @@ void searchingWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) 
 }
 
 void followWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
+    uint8_t distCenter = sensorRead(ID_SENSOR, DYN_REG__IR_CENTER);
     int wall = getNearWall(minDist);//Miramos en que pared esta, tambien pillamos la distancia minima
-    if (isOnWall(minDist, 40, 70) == 1) {//Si esta en la pared
+    if (isOnWall(minDist, 35, 45 ) == 1) {//Si esta en la pared
         //Corregimos posicion
         if (wall != 0) {//La pared mas cercana no es la de la izquierda, corregimos
             //Hacemos un stop y en la siguiente iteracion giramos
@@ -119,7 +120,7 @@ void followWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
                     stop();
                     *isStopped = 1;
                 } else {//Esta parado
-                    turnRight(80);//giramos
+                    turnRight(MAIN_SPEED);//giramos
                     *lastWall = 2;
                     *isStopped = 0;// ya no esta quieto
                 }
@@ -150,21 +151,24 @@ void followWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
 }
 
 void correctPosition(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
+    uint8_t distCenter = sensorRead(ID_SENSOR, DYN_REG__IR_CENTER);
     int wall = getNearWall(minDist);//Miramos en que pared esta, tambien pillamos la distancia minima
-    if (isOnWall(minDist,40 , 70) == 0) {
-        if(*minDist >=70){//Si se ha desviado para la derecha, giramos en lado contrario
+    if (isOnWall(minDist,35 , 45) == 0) {
+        if(*minDist >=45){//Si se ha desviado para la derecha, giramos en lado contrario
             if (*lastWall != 2) {
                 if (*isStopped == 0) {//No esta parado
                     stop();
                     *isStopped = 1;
                 } else {//Esta parado
-                    turnLeft(80);//giramos
+                    turnLeft(MAIN_SPEED);//giramos
                     *lastWall = 2;
                     *isStopped = 0;// ya no esta quieto
                 }
             }
-        }else{//se ha desviado para la izquierda, giramos a la derecha
-            if (*lastWall != 0) {
+        }else{//No se desvia hacia derecha, quizas ha de girar a derecha para corregir posicion o quizas para esquivar obstaculo
+            if (distCenter <45)
+                *stage = 3;
+            else if (*lastWall != 0) {
                 if (*isStopped == 0) {//No esta parado
                     stop();
                     *isStopped = 1;
@@ -177,6 +181,22 @@ void correctPosition(uint8_t *minDist, int *stage, int *lastWall, int *isStopped
         }
     }else {//esta corregido la posicion
         printf("esta en pared %d \n", *minDist);
+        if (*isStopped == 0) { //Si no esta parado, lo paramos
+            stop();
+            *isStopped = 1;
+        }
+        *lastWall = -1;//Reset de wall
+        *stage = 1;
+    }
+}
+rotateRight(uint8_t *minDist, int *stage, int *lastWall, int *isStopped){
+    uint8_t distCenter = sensorRead(ID_SENSOR, DYN_REG__IR_CENTER);
+    if (distCenter < 45){
+        turnRight(90);//giramos
+        *isStopped = 0;// ya no esta quieto
+    }
+    else {//esta corregido la posicion
+
         if (*isStopped == 0) { //Si no esta parado, lo paramos
             stop();
             *isStopped = 1;
@@ -255,6 +275,10 @@ int main(void) {
                 printf("Hay que corregir posicion\n");
                 correctPosition(&minDistance, &stage, &lastWall, &isStopped);
                 break;
+            case 3:
+                printf("Giramos en obstaculo");
+                rotateRight(&minDistance, &stage, &lastWall, &isStopped);
+
         }
 
 
