@@ -55,7 +55,7 @@ void turnLeft(unsigned int speed) {
 
 void turnRight(unsigned int speed) {
     if (speed < MAX_SPEED) {
-        //To go right left wheel to right and move it with speed
+        //To go right left wheel to left and move it with speed
         //Right wheel is stopped
         printf("going to right\n");
         moveWheel(ID_MOTOR_R, true, 0);

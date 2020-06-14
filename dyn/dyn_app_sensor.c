@@ -10,9 +10,8 @@
 #include "dyn_app_sensor.h"
 #include "dyn_instr.h"
 
-
+//Setting the distance to consider an object
 void setDistanceToObject(byte ID, byte position, int dist) {
-    //Ponemos en el obstacle detected compare value
     byte params[1] = {dist};
     //position will be 0x34(RAM) or 0x14(ROM)
     dyn_write(ID, position, params, 1);
@@ -26,6 +25,7 @@ uint8_t distanceToGetObstacle(byte ID, byte postion) {
     return dist;
 }
 
+//Return distance from sensor to object
 uint8_t sensorRead(byte ID, byte sensor) {
     //sensor can be 1A Sensor Left; 1B Sensor Center; 1C Sensor Right
     uint8_t dist = 0;
@@ -34,7 +34,6 @@ uint8_t sensorRead(byte ID, byte sensor) {
 
     return dist;
 }
-
 
 uint8_t getObstacleFlag(byte ID) {
     //flags
