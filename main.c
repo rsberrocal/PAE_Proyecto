@@ -109,7 +109,6 @@ void searchingWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) 
 }
 
 void followWall(uint8_t *minDist, int *stage, int *lastWall, int *isStopped) {
-    uint8_t distCenter = sensorRead(ID_SENSOR, DYN_REG__IR_CENTER);
     int wall = getNearWall(minDist);//Miramos en que pared esta, tambien pillamos la distancia minima
     if (isOnWall(minDist, 35, 45 ) == 1) {//Si esta en la pared
         //Corregimos posicion
@@ -180,7 +179,6 @@ void correctPosition(uint8_t *minDist, int *stage, int *lastWall, int *isStopped
             }
         }
     }else {//esta corregido la posicion
-        printf("esta en pared %d \n", *minDist);
         if (*isStopped == 0) { //Si no esta parado, lo paramos
             stop();
             *isStopped = 1;
@@ -281,101 +279,6 @@ int main(void) {
 
         }
 
-
-        //set distances
-        /* if (!isOnWall(&minDistance)) {//Si no hemos llegado al la distancia minima para no buscar la pared
-             int wall = getNearWall(&minDistance);//Miramos en que pared esta, tambien pillamos la distancia minima
-             if (flagRotation != wall) {//Si la pared esta en una dirección a la que no estamos, cambiamos direccion
-                 hasStop = 0;// need stop
-                 switch (wall) {
-                     case 0://Si esta a la izquierda
-                         printf("Es la izquierda\n");
-                         checkStop(&hasStop);
-                         if (minDistance <= 30) {//Si la distancia minima es 15 volvemos a la derecha para no salirnos
-                             printf("Corregimos posicion a la derecha\n\n\n\n\n\n\n\n");
-                             turnRight(main_speed);//Giramos el robot
-                         } else {
-                             turnLeft(main_speed);//Si estamos fuera del limite menor vamos a la izquierda
-                         }
-                         break;
-                     case 1://Si es el centro miramos adelante
-                         printf("Es el centro \n");
-                         checkStop(&hasStop);
-                         forward(main_speed);
-                         break;
-                     case 2:
-                         printf("Es la derecha \n");
-                         checkStop(&hasStop);
-                         if (minDistance <= 30) {
-                             turnLeft(main_speed);
-                         } else {
-                             turnRight(main_speed);
-                         }
-                         break;
-                 }
-                 flagRotation = wall;
-             }
-             printf("min distance %d \n", minDistance);
-         } else {
-             //Follow the wall
-             if (searchingWall == 1) {
-                 printf("Stop searching\n");//Paramos de i
-                 hasStop = 0;//need stop
-                 flagRotation = -1;
-             }
-             if (isCorrectPosition(&minDistance) == 1) {
-                 printf("Correct position\n");
-                 if (flagRotation != 5){
-                     checkStop(&hasStop);
-                     forward(main_speed);
-                     flagRotation = 5;
-                 }
-             } else {
-                 printf("Correcting position to right \n");
-                 if (flagRotation != 6){
-                     checkStop(&hasStop);
-                     turnRight(main_speed-20);
-                     flagRotation = 6;
-                 }
-             }
-             //Rotate to the left to follow the wall
-             /*turnRight(main_speed);
-             stop();*/
-
-        //Signal the emulation thread to stop
-        /*}*/
-
-
-
-        //1er caso, no hay ningun obstaculo, go forward
-        /*if (distLeft > MAX_DISTANCE_OBSTACLE && distCenter > MAX_DISTANCE_OBSTACLE &&
-            distRight > MAX_DISTANCE_OBSTACLE) {
-            printf("No hay obstaculos \n");
-            forward(main_speed);
-        } else {
-            if (distLeft >= distCenter && distLeft >= distRight) {//2do caso, en la izquierda esta mas properoç
-                printf("La izq es mayor \n");
-                stop();
-                turnLeft(10);
-                stop();
-                forward(10);
-                stop();
-            } else if (distCenter >= distLeft && distCenter >= distRight) {//3er caso, el centro esta mas propero
-                printf("center es mayor \n");
-                stop();
-                turnLeft(10);
-                stop();
-                forward(10);
-                stop();
-            } else if (distRight >= distCenter && distRight >= distLeft) {//4to caso, en la derecha esta mas propero
-                printf("La der es mayor \n");
-                stop();
-                turnRight(10);
-                stop();
-                forward(10);
-                stop();
-            }
-        }*/
         /*** Teclado ***/
         if (estado != estado_anterior) {
             Set_estado_anterior(estado);
@@ -383,12 +286,10 @@ int main(void) {
             switch (estado) {
                 case Sw1:
                     printf("Boton Sw1 ('a') apretado\n");
-                    //dyn_led_control(1, 1); //Probaremos de encender el led del motor 2
                     printf("\n");
                     break;
                 case Sw2:
                     printf("Boton Sw2 ('s') apretado\n");
-                    //dyn_led_control(1, 0); //Probaremos de apagar el led del motor 2
                     printf("\n");
                     break;
                 case Up:
@@ -430,19 +331,12 @@ int main(void) {
                 case Quit:
                     printf("Adios!\n");
                     break;
-                    //etc, etc...
-                    pthread_kill(tid, SIGTERM);
-                    pthread_kill(jid, SIGTERM);
-                    printf("Programa terminado\n");
-                    fflush(stdout);
             }
             fflush(stdout);
         }
-
     }
     pthread_kill(tid, SIGTERM);
     pthread_kill(jid, SIGTERM);
     printf("Programa terminado\n");
     fflush(stdout);
-
 }
